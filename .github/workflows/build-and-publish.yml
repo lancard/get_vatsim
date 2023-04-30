@@ -1,0 +1,42 @@
+name: Build and Upload METAR
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        
+      - name: Generate web directory
+        run: mkdir web
+
+      - name: Download vatsim data
+        run: wget -q -O vatsim-data.json https://data.vatsim.net/v3/vatsim-data.json
+
+      - name: Download vatsim data
+        run: mv vatsim-data.json web/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './web'
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
