@@ -1,8 +1,8 @@
-name: Build and Upload METAR
+name: Download VATSIM
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
+#  schedule:
+#    - cron: '*/5 * * * *'
   push:
     branches: [ "master" ]
   pull_request:
